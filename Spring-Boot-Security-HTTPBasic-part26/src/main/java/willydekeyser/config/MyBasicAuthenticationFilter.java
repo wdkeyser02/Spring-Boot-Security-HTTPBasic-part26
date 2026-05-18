@@ -21,33 +21,28 @@ public class MyBasicAuthenticationFilter extends BasicAuthenticationFilter {
 	private SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
 	
 	public MyBasicAuthenticationFilter(AuthenticationManager authenticationManager) {
-		
 		super(authenticationManager);
 		this.authenticationManager = authenticationManager;
 	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-				
+			throws IOException, ServletException {	
 		String header = request.getHeader("Authorization");
-		
 		if (header != null && header.startsWith("Basic ")) {
 			String credentials = header.substring("Basic ".length());
             String decodedCredentials = new String(java.util.Base64.getDecoder().decode(credentials));
             String[] parts = decodedCredentials.split(":", 2);
             String username = parts[0];
             String password = parts[1];
-						
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContext context = this.securityContextHolderStrategy.createEmptyContext();
-			context.setAuthentication(authentication);
-			this.securityContextHolderStrategy.setContext(context);
-                        
+    		context.setAuthentication(authentication);
+    		this.securityContextHolderStrategy.setContext(context);
 		}
-				
 		chain.doFilter(request, response);
 	}
 
