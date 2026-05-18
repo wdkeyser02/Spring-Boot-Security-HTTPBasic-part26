@@ -22,15 +22,6 @@ public class SecurityConfig {
 	@SuppressWarnings("unused")
 	private AuthenticationManager authenticationManager;
 	
-//	private final ObjectPostProcessor<BasicAuthenticationFilter> myPostProcessor = new ObjectPostProcessor<>() {
-//        
-//		@SuppressWarnings("unchecked")
-//		@Override
-//        public <O extends BasicAuthenticationFilter> O postProcess(final O filter) {
-//            return (O) new MyBasicAuthenticationFilter(authenticationManager);
-//        }
-//    };
-	
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         
@@ -38,14 +29,12 @@ public class SecurityConfig {
     	http
                 .httpBasic(customizer -> customizer.withObjectPostProcessor(
                 		new ObjectPostProcessor<BasicAuthenticationFilter>() {
-
 							@SuppressWarnings("unchecked")
 							@Override
 							public <O extends BasicAuthenticationFilter> O postProcess(O object) {
 								return (O) new MyBasicAuthenticationFilter(authenticationManager);
 							}
-						}
-                		))
+						}))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/public").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
