@@ -22,7 +22,7 @@ public class SecurityConfig {
 	
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-        
+    	
     	this.authenticationManager = authenticationManager;
     	http
                 .httpBasic(customizer -> customizer.withObjectPostProcessor(
