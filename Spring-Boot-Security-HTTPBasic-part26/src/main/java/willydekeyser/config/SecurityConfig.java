@@ -31,6 +31,7 @@ public class SecurityConfig {
 								return (O) new MyBasicAuthenticationFilter(authenticationManager);
 							}
 						}))
+                .formLogin(config -> config.disable())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/public").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
